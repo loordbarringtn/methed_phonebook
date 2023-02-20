@@ -33,10 +33,8 @@ const data = [
   const createHeader = () => {
     const header = document.createElement("header");
     header.classList.add("header");
-
     const headerContainer = createContainer();
     header.append(headerContainer);
-
     header.headerContainer = headerContainer;
 
     return header;
@@ -52,10 +50,10 @@ const data = [
 
   const createMain = () => {
     const main = document.createElement("main");
-
     const mainContainer = createContainer();
     main.append(mainContainer);
     main.mainContainer = mainContainer;
+
     return main;
   };
 
@@ -67,9 +65,11 @@ const data = [
       button.type = type;
       button.textContent = text;
       button.className = className;
+
       return button;
     });
     btnWrapper.append(...btns);
+
     return {
       btnWrapper,
       btns,
@@ -101,7 +101,6 @@ const data = [
   const createForm = () => {
     const overlay = document.createElement("div");
     overlay.classList.add("form-overlay");
-
     const form = document.createElement("form");
     form.classList.add("form");
     form.insertAdjacentHTML(
@@ -170,9 +169,9 @@ const data = [
         text: "Удалить",
       },
     ]);
+
     const table = createTable();
     const form = createForm();
-
     header.headerContainer.append(logo);
     main.mainContainer.append(buttonGroup.btnWrapper, table, form.overlay);
     app.append(header, main, footer);
@@ -204,18 +203,14 @@ const data = [
     tr.phoneLink = phoneLink;
     tdPhone.append(phoneLink);
     const tdEdit = document.createElement("td");
-    // const buttonEdit = document.createElement("button");
     const btn = createButtonsGroup([
       {
         className: "btn btn-secondary",
         type: "button",
-        text: "Редактирвать"
+        text: "Редактировать"
       }
-    ])
-    // buttonEdit.classList.add("btn", "btn-edit");
-    // buttonEdit.textContent = "Редактировать";
+    ]);
     tdEdit.append(...btn.btns);
-
     tr.append(tdDel, tdName, tdSurname, tdPhone, tdEdit);
 
     return tr;
@@ -224,6 +219,7 @@ const data = [
   const renderContacts = (elem, data) => {
     const allRow = data.map(createRow);
     elem.append(...allRow);
+
     return allRow;
   };
 
@@ -242,11 +238,8 @@ const data = [
   const init = (selectorApp, title) => {
     const app = document.querySelector(selectorApp);
     const phoneBook = renderPhoneBook(app, title);
-
     const { list, logo, btnAdd, formOverlay, form } = phoneBook;
-
     const allRow = renderContacts(list, data);
-
     hoverRow(allRow, logo);
 
     btnAdd.addEventListener("click", () => {
