@@ -62,7 +62,6 @@ const data = [
   const createButtonsGroup = (params) => {
     const btnWrapper = document.createElement("div");
     btnWrapper.classList.add("btn-wrapper");
-
     const btns = params.map(({ className, type, text }) => {
       const button = document.createElement("button");
       button.type = type;
@@ -70,9 +69,7 @@ const data = [
       button.className = className;
       return button;
     });
-
     btnWrapper.append(...btns);
-
     return {
       btnWrapper,
       btns,
@@ -90,6 +87,7 @@ const data = [
         <th>Имя</th>
         <th>Фамилия</th>
         <th>Телефон</th>
+        <th>Редактировать</th>
         </tr>`
     );
 
@@ -205,7 +203,20 @@ const data = [
     phoneLink.textContent = phone;
     tr.phoneLink = phoneLink;
     tdPhone.append(phoneLink);
-    tr.append(tdDel, tdName, tdSurname, tdPhone);
+    const tdEdit = document.createElement("td");
+    // const buttonEdit = document.createElement("button");
+    const btn = createButtonsGroup([
+      {
+        className: "btn btn-secondary",
+        type: "button",
+        text: "Редактирвать"
+      }
+    ])
+    // buttonEdit.classList.add("btn", "btn-edit");
+    // buttonEdit.textContent = "Редактировать";
+    tdEdit.append(...btn.btns);
+
+    tr.append(tdDel, tdName, tdSurname, tdPhone, tdEdit);
 
     return tr;
   };
@@ -250,8 +261,8 @@ const data = [
       formOverlay.classList.remove("is-visible");
     });
 
-    document.querySelector(".modal__close").addEventListener("click", () => {
-      overlay.classList.remove("active");
+    document.querySelector(".close").addEventListener("click", () => {
+      formOverlay.classList.remove("is-visible");
     });
   };
 
