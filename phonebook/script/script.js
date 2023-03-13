@@ -23,10 +23,32 @@ const data = [
   },
 ];
 
+const getStorage = key => {
+  const data = localStorage.getItem(key);
+  if (data) {
+    return JSON.parse(data);
+  } else {
+    return [];
+  }
+};
+
+const setStorage = (key, object) => {
+  const data = getStorage(key);
+  data.push(object);
+  localStorage.setItem(key, JSON.stringify(data));
+};
+
+const removeStorage = (key, phoneNumber) => {
+  const data = getStorage(key);
+  console.log(typeof data);
+  const contacts = getStorage(key);
+  const dataFiltered = data.filter(item => item.phone != phoneNumber);
+  localStorage.setItem(key, JSON.stringify(dataFiltered));
+};
+
 {
   const addContactData = contact => {
     data.push(contact);
-    console.log('data: ', data);
   };
 
   const createContainer = () => {
@@ -276,14 +298,21 @@ const data = [
   list.addEventListener('click', e => {
     const target = e.target;
     if (target.closest('.del-icon')){
+      // console.log(target.closest('.contact a').getAttribute('href'));
+      console.log(target.closest('.contact').querySelector('td:nth-child(4)').textContent);
+
+      const phoneNumber2Delete = target.closest('.contact').querySelector('td:nth-child(4)').textContent;
+      
+
+
       target.closest('.contact').remove();
+      removeStorage('contact', phoneNumber2Delete);
     }
   }); 
   };
 
   const addContactPage = (contact, list) => {
     list.append(createRow(contact));
-
   };
 
   const formControl = (form, list, closeModal) => {
@@ -292,7 +321,8 @@ const data = [
       const formData = new FormData(e.target);
       const newContact = Object.fromEntries(formData);
       addContactPage(newContact, list);
-      addContactData(newContact);
+      setStorage('contact', newContact);
+      // addContactData(newContact);
       form.reset();
       closeModal();
     });
@@ -309,12 +339,17 @@ const data = [
             btnDel 
           } = renderPhoneBook(app, title);
 
-    const allRow = renderContacts(list, data);
+    const allRows = renderContacts(list, data);
+    const localStorageRows = renderContacts(list, getStorage('contact'));
+
     const {closeModal} = modalControl(btnAdd, formOverlay);
      
-    hoverRow(allRow, logo);
+    hoverRow(allRows, logo);
+    hoverRow(localStorageRows, logo);
     deleteControl(btnDel, list);
     formControl(form, list, closeModal);  
+
+
   };
 
   window.phoneBookInit = init;
