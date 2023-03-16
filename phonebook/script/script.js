@@ -1,43 +1,26 @@
-"use strict";
-
-const {
+import storage from './modules/serviceStorage.js';
+import { renderPhoneBook, renderContacts } from './modules/render.js';
+import {
   modalControl,
   deleteControl,
   formControl,
   hoverRow,
-} = require('./modules/control');
+} from './modules/control.js';
 
-const {
-  renderPhoneBook,
-  renderContacts,
-} = require('./modules/render');
+const init = (selectorApp, title) => {
+  const app = document.querySelector(selectorApp);
 
-const {
-  getStorage,
-} = require('./modules/serviceStorage');
+  const { list, logo, btnAdd, formOverlay, form, btnDel } = renderPhoneBook(
+    app,
+    title
+  );
 
-{  
-  const init = (selectorApp, title) => {
-    const app = document.querySelector(selectorApp);
+  const localStorageRows = renderContacts(list, storage.getStorage('contact'));
+  const { closeModal } = modalControl(btnAdd, formOverlay);
 
-    const { list,
-            logo, 
-            btnAdd, 
-            formOverlay, 
-            form,
-            btnDel 
-          } = renderPhoneBook(app, title);
+  hoverRow(localStorageRows, logo);
+  deleteControl(btnDel, list);
+  formControl(form, list, closeModal);
+};
 
-    // const allRows = renderContacts(list, data);
-    const localStorageRows = renderContacts(list, getStorage('contact'));
-    const {closeModal} = modalControl(btnAdd, formOverlay);
-     
-    // hoverRow(allRows, logo);
-    hoverRow(localStorageRows, logo);
-    deleteControl(btnDel, list);
-    formControl(form, list, closeModal);  
-  };
-
-  window.phoneBookInit = init;
- }
-
+window.phoneBookInit = init;

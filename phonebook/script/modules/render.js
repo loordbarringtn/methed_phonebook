@@ -1,59 +1,42 @@
+import * as create from './createElements.js';
 
-'use strict';
+export const renderPhoneBook = (app, title) => {
+  const header = create.createHeader();
+  const logo = create.createLogo(title);
+  const main = create.createMain();
+  const footer = create.createFooter(title);
+  const buttonGroup = create.createButtonsGroup([
+    {
+      className: 'btn btn-primary',
+      type: 'button',
+      text: 'Добавить',
+    },
+    {
+      className: 'btn btn-danger',
+      type: 'button',
+      text: 'Удалить',
+    },
+  ]);
 
-  const {
-    createHeader,
-    createLogo,
-    createMain,
-    createButtonsGroup,
-    createTable,
-    createForm,
-    createFooter,
-    createRow,
-  } = require('./createElements');
-    
-const renderPhoneBook = (app, title) => {
-    const header = createHeader();
-    const logo = createLogo(title);
-    const main = createMain();
-    const footer = createFooter(title);
-    const buttonGroup = createButtonsGroup([
-      {
-        className: "btn btn-primary",
-        type: "button",
-        text: "Добавить",
-      },
-      {
-        className: "btn btn-danger",
-        type: "button",
-        text: "Удалить",
-      },
-    ]);
+  const table = create.createTable();
+  const { form, overlay } = create.createForm();
+  header.headerContainer.append(logo);
+  main.mainContainer.append(buttonGroup.btnWrapper, table, overlay);
+  app.append(header, main, footer);
 
-    const table = createTable();
-    const {form, overlay} = createForm();
-    header.headerContainer.append(logo);
-    main.mainContainer.append(buttonGroup.btnWrapper, table, overlay);
-    app.append(header, main, footer);
-
-    return {
-      list: table.tbody,
-      logo,
-      btnAdd: buttonGroup.btns[0],
-      btnDel: buttonGroup.btns[1],
-      formOverlay: overlay,
-      form: form,
-    };
+  return {
+    list: table.tbody,
+    logo,
+    btnAdd: buttonGroup.btns[0],
+    btnDel: buttonGroup.btns[1],
+    formOverlay: overlay,
+    form: form,
   };
+};
 
-  const renderContacts = (elem, data) => {
-    const allRow = data.map(createRow);
-    elem.append(...allRow);
+export const renderContacts = (elem, data) => {
+  const allRow = data.map(create.createRow);
+  elem.append(...allRow);
 
-    return allRow;
-  };
-  
-  module.exports = {
-    renderPhoneBook,
-    renderContacts,
-  };
+  return allRow;
+};
